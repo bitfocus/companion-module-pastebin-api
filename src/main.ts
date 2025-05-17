@@ -5,7 +5,7 @@ import { UpgradeScripts } from './upgrades.js'
 import { UpdateActions } from './actions.js'
 import { UpdateFeedbacks } from './feedbacks.js'
 
-export class ModuleInstance extends InstanceBase<ModuleConfig> {
+export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 	config!: ModuleConfig // Setup in init()
 
 	constructor(internal: unknown) {
@@ -48,4 +48,4 @@ export class ModuleInstance extends InstanceBase<ModuleConfig> {
 	}
 }
 
-runEntrypoint(ModuleInstance, UpgradeScripts)
+runEntrypoint(PasteBinAPI, UpgradeScripts)
