@@ -5,6 +5,14 @@ import { UpgradeScripts } from './upgrades.js'
 import { UpdateActions } from './actions.js'
 import { UpdateFeedbacks } from './feedbacks.js'
 
+export const API_PATH = 'https://pastebin.com/api/'
+
+export const API_CALLS = {
+	Login: 'api_login.php',
+	Post: 'api_post.php',
+	Raw: 'api_raw.php',
+}
+
 export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 	config!: ModuleConfig // Setup in init()
 

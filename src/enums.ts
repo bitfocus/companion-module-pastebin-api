@@ -283,3 +283,18 @@ export enum Private {
 	Unlisted = '1',
 	Private = '2',
 }
+
+export enum Parameters {
+	DevKey = 'api_dev_key',
+	ExpireDate = 'api_paste_expire_date',
+	FolderKey = 'api_folder_key',
+	Option = 'api_option',
+	PasteCode = 'api_paste_code',
+	PasteFormat = 'api_paste_format',
+	PasteKey = 'api_paste_key',
+	PasteName = 'api_paste_name',
+	PastePrivate = 'api_paste_private',
+	ResultsLimit = 'api_results_limit',
+	UserKey = 'api_user_key',
+	UserPassword = 'api_user_password',
+}
