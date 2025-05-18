@@ -1,21 +1,22 @@
 import { type DropdownChoice } from '@companion-module/base'
-import { ExpireTime, PasteFormat, Private } from './enums.js'
+import { ExpireTime, PasteFormat, Publicity } from './enums.js'
 
 export const DropdownExpire: DropdownChoice[] = [
 	{ id: ExpireTime.Never, label: 'Never' },
 	{ id: ExpireTime.TenMinutes, label: '10 Minutes' },
 	{ id: ExpireTime.Hour, label: '1 Hour' },
 	{ id: ExpireTime.Day, label: '1 Day' },
-	{ id: ExpireTime.Week, label: '1 Week' },
+	{ id: ExpireTime.OneWeek, label: '1 Week' },
+	{ id: ExpireTime.TwoWeeks, label: '2 Weeks' },
 	{ id: ExpireTime.Month, label: '1 Month' },
 	{ id: ExpireTime.SixMonths, label: '6 Months' },
 	{ id: ExpireTime.Year, label: '1 Year' },
 ]
 
 export const DropdownPrivate: DropdownChoice[] = [
-	{ id: Private.Public, label: 'Public' },
-	{ id: Private.Unlisted, label: 'Unlisted' },
-	{ id: Private.Private, label: 'Private' },
+	{ id: Publicity.Public, label: 'Public' },
+	{ id: Publicity.Unlisted, label: 'Unlisted' },
+	{ id: Publicity.Private, label: 'Private' },
 ]
 
 export const DropdownPasteFormat: DropdownChoice[] = [

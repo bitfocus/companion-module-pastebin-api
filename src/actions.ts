@@ -1,22 +1,153 @@
+import { CompanionActionDefinition, Regex } from '@companion-module/base'
+import { DropdownExpire, DropdownPasteFormat, DropdownPrivate } from './choices.js'
 import type { PasteBinAPI } from './main.js'
+import { ApiPasteFormat, ExpireDate, Publicity } from 'pastebin-api'
+
+export enum ActionId {
+	CreatePaste = 'createPaste',
+	DeletePaste = 'deletePaste',
+	GetPastes = 'getPastes',
+	GetRawPaste = 'getRawPaste',
+}
 
 export function UpdateActions(self: PasteBinAPI): void {
-	self.setActionDefinitions({
-		sample_action: {
-			name: 'My First Action',
+	const actions: { [id in ActionId]: CompanionActionDefinition | undefined } = {
+		[ActionId.CreatePaste]: {
+			name: 'Create Paste',
 			options: [
 				{
-					id: 'num',
-					type: 'number',
-					label: 'Test',
-					default: 5,
-					min: 0,
-					max: 100,
+					type: 'textinput',
+					id: 'name',
+					label: 'Name',
+					default: 'New Paste',
+					useVariables: { local: true },
+					regex: Regex.SOMETHING,
+					required: true,
+				},
+				{
+					type: 'dropdown',
+					id: 'publicity',
+					label: 'Publicity',
+					choices: DropdownPrivate,
+					default: DropdownPrivate[0].id,
+				},
+				{
+					type: 'dropdown',
+					id: 'expire',
+					label: 'Expire',
+					choices: DropdownExpire,
+					default: DropdownExpire[0].id,
+				},
+				{
+					type: 'dropdown',
+					id: 'format',
+					label: 'Format',
+					choices: DropdownPasteFormat,
+					default: DropdownPasteFormat[113].id,
+				},
+				{
+					type: 'textinput',
+					id: 'folder',
+					label: 'Folder',
+					useVariables: { local: true },
+					regex: Regex.SOMETHING,
+					required: false,
+				},
+				{
+					type: 'textinput',
+					id: 'code',
+					label: 'Code',
+					useVariables: { local: true },
+					regex: Regex.SOMETHING,
+					required: true,
 				},
 			],
-			callback: async (event) => {
-				console.log('Hello world!', event.options.num)
+			callback: async (action, context) => {
+				const name = await context.parseVariablesInString(action.options.name?.toString() ?? '')
+				const code = await context.parseVariablesInString(action.options.code?.toString() ?? '')
+				let folder: string | undefined
+				if (action.options.folder) {
+					folder = await context.parseVariablesInString(action.options.folder.toString())
+				}
+				const pasteUri = await self.createPaste({
+					name: name,
+					apiUserKey: self.apiUserKey,
+					publicity: action.options.publicity as Publicity,
+					expireDate: action.options.expire as ExpireDate,
+					format: action.options.format as ApiPasteFormat,
+					folderKey: folder,
+					code: code,
+				})
+				if (pasteUri) {
+					self.log('info', `Paste ${name} created with URI: ${pasteUri}`)
+				}
 			},
 		},
-	})
+		[ActionId.DeletePaste]: {
+			name: 'Delete Paste',
+			options: [
+				{
+					type: 'textinput',
+					id: 'pasteKey',
+					label: 'Paste Key',
+					useVariables: { local: true },
+					regex: Regex.SOMETHING,
+				},
+			],
+			callback: async (action, context) => {
+				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
+				const deletePaste = await self.deletePaste({ pasteKey: key, userKey: self.apiUserKey })
+				if (deletePaste) {
+					self.log('info', `Paste: ${key} deleted`)
+				} else {
+					self.log('warn', `Could not delete ${key}`)
+				}
+			},
+		},
+		[ActionId.GetPastes]: {
+			name: 'Get Pastes',
+			options: [
+				{
+					type: 'textinput',
+					id: 'limit',
+					label: 'Limit',
+					useVariables: { local: true },
+					regex: Regex.SOMETHING,
+					default: '100',
+				},
+			],
+			callback: async (action, context) => {
+				let limit = Number.parseInt(await context.parseVariablesInString(action.options.limit?.toString() ?? ''))
+				limit = Number.isNaN(limit) ? 100 : limit < 1 ? 1 : limit > 1000 ? 1000 : limit
+				await self.getPastes({ userKey: self.apiUserKey, limit: limit })
+			},
+		},
+		[ActionId.GetRawPaste]: {
+			name: 'Get Raw Paste',
+			options: [
+				{
+					type: 'textinput',
+					id: 'pasteKey',
+					label: 'Paste Key',
+					useVariables: { local: true },
+					regex: Regex.SOMETHING,
+				},
+				{
+					type: 'custom-variable',
+					id: 'variable',
+					label: 'Variable',
+				},
+			],
+			callback: async (action, context) => {
+				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
+				const paste = await self.getRawPaste({ userKey: self.apiUserKey, pasteKey: key })
+				if (paste === undefined) {
+					self.log('warn', `Could not get raw paste ${key}`)
+					return
+				}
+				self.setCustomVariableValue(action.options.variable?.toString() ?? '', paste)
+			},
+		},
+	}
+	self.setActionDefinitions(actions)
 }

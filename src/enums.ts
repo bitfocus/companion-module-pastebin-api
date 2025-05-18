@@ -272,13 +272,14 @@ export enum ExpireTime {
 	TenMinutes = '10M',
 	Hour = '1H',
 	Day = '1D',
-	Week = '1W',
+	OneWeek = '1W',
+	TwoWeeks = '2W',
 	Month = '1M',
 	SixMonths = '6M',
 	Year = '1Y',
 }
 
-export enum Private {
+export enum Publicity {
 	Public = '0',
 	Unlisted = '1',
 	Private = '2',
@@ -296,5 +297,12 @@ export enum Parameters {
 	PastePrivate = 'api_paste_private',
 	ResultsLimit = 'api_results_limit',
 	UserKey = 'api_user_key',
+	UserName = 'api_user_name',
 	UserPassword = 'api_user_password',
+}
+
+export enum ApiCalls {
+	Login = 'api_login.php',
+	Post = 'api_post.php',
+	Raw = 'api_raw.php',
 }

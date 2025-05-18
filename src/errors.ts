@@ -1,0 +1,33 @@
+export const BadResponse = {
+	CantPasteAsGuest: `Bad API request, you can't add paste to folder as guest`,
+	InvalidOption: 'Bad API request, invalid api_option',
+	InvalidDevKey: 'Bad API request, invalid api_dev_key',
+	InvalidExpireDate: 'Bad API request, invalid api_paste_expire_date',
+	InvalidPermissionRemove: 'Bad API request, invalid permission to remove paste',
+	InvalidPermissionView: 'Bad API request, invalid permission to view this paste or invalid api_paste_key',
+	InvalidPrivate: 'Bad API request, invalid api_paste_private',
+	InvalidFormat: 'Bad API request, invalid api_paste_format',
+	InvalidUserKey: 'Bad API request, invalid api_user_key',
+	ExpiredUserKey: 'Bad API request, invalid or expired api_user_key',
+	MaxUnlisted: 'Bad API request, maximum number of 25 unlisted pastes for your free account',
+	MaxPrivate: 'Bad API request, maximum number of 10 private pastes for your free account',
+	MissingPasteCode: 'Bad API request, api_paste_code was empty',
+	MaxSizeExceeded: 'Bad API request, maximum paste file size exceeded',
+}
+
+export const BadResponseArray: string[] = [
+	BadResponse.CantPasteAsGuest,
+	BadResponse.ExpiredUserKey,
+	BadResponse.InvalidDevKey,
+	BadResponse.InvalidExpireDate,
+	BadResponse.InvalidFormat,
+	BadResponse.InvalidOption,
+	BadResponse.InvalidPermissionRemove,
+	BadResponse.InvalidPermissionView,
+	BadResponse.InvalidPrivate,
+	BadResponse.InvalidUserKey,
+	BadResponse.MaxPrivate,
+	BadResponse.MaxSizeExceeded,
+	BadResponse.MaxUnlisted,
+	BadResponse.MissingPasteCode,
+]

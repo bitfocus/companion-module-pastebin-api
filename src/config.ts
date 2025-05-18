@@ -1,27 +1,44 @@
 import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
+const API_PATH = 'pastebin.com'
+
 export interface ModuleConfig {
-	host: string
-	port: number
+	domain: string
+	devKey: string
+	user: string
+	password: string
 }
 
 export function GetConfigFields(): SomeCompanionConfigField[] {
 	return [
 		{
 			type: 'textinput',
-			id: 'host',
-			label: 'Target IP',
+			id: 'domain',
+			label: 'Domain',
 			width: 8,
-			regex: Regex.IP,
+			default: API_PATH,
+			regex: Regex.HOSTNAME,
 		},
 		{
-			type: 'number',
-			id: 'port',
-			label: 'Target Port',
-			width: 4,
-			min: 1,
-			max: 65535,
-			default: 8000,
+			type: 'textinput',
+			id: 'devKey',
+			label: 'Developer API Key',
+			width: 8,
+			regex: Regex.SOMETHING,
+		},
+		{
+			type: 'textinput',
+			id: 'user',
+			label: 'User Name',
+			width: 8,
+			regex: Regex.SOMETHING,
+		},
+		{
+			type: 'textinput',
+			id: 'password',
+			label: 'Password',
+			width: 8,
+			regex: Regex.SOMETHING,
 		},
 	]
 }

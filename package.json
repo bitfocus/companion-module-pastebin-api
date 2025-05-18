@@ -25,7 +25,10 @@
 	"dependencies": {
 		"@companion-module/base": "~1.11.3",
 		"axios": "~1.9.0",
-		"p-queue": "~8.1.0"
+		"fast-xml-parser": "^5.2.3",
+		"p-queue": "~8.1.0",
+		"pastebin-api": "^7.0.0",
+		"yaml": "^2.8.0"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^2.3.0",
