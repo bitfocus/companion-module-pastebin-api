@@ -45,6 +45,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 		if (config.devKey) {
 			this.client = new PasteClient({ apiKey: config.devKey, domain: config.domain })
 			await this.login(config)
+			await this.getPastes({ limit: 1000, userKey: this.apiUserKey })
 		} else {
 			this.updateStatus(InstanceStatus.BadConfig)
 		}
@@ -72,6 +73,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 		return this.queue.add(async () => {
 			try {
 				const deleted = await this.client.deletePasteByKey(options)
+				await this.getPastes({ limit: 1000, userKey: this.apiUserKey })
 				return deleted
 			} catch (error) {
 				this.log('warn', `Delete Paste Failed: ${typeof error == 'string' ? error : JSON.stringify(error)}`)
@@ -99,9 +101,13 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 		return this.queue.add(async () => {
 			try {
 				const pastes = await this.client.getPastesByUser(options)
+				this.pastes.clear()
 				pastes.forEach((paste) => {
 					this.pastes.set(paste.paste_key, paste)
 				})
+				this.updateActions()
+				this.updateFeedbacks()
+				this.updateVariableDefinitions()
 				return pastes
 			} catch (error) {
 				this.log('warn', `Get Pastes Failed: ${typeof error == 'string' ? error : JSON.stringify(error)}`)

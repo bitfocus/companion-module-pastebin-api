@@ -280,9 +280,9 @@ export enum ExpireTime {
 }
 
 export enum Publicity {
-	Public = '0',
-	Unlisted = '1',
-	Private = '2',
+	Public = 0,
+	Unlisted = 1,
+	Private = 2,
 }
 
 export enum Parameters {

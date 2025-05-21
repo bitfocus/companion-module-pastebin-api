@@ -1,3 +1,3 @@
 ## Pastebin
 
-Write some help for your users here!
+A user account is required to access your own Developer API key.

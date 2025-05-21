@@ -1,4 +1,4 @@
-import { CompanionActionDefinition, Regex } from '@companion-module/base'
+import { CompanionActionDefinition, DropdownChoice, Regex } from '@companion-module/base'
 import { DropdownExpire, DropdownPasteFormat, DropdownPrivate } from './choices.js'
 import type { PasteBinAPI } from './main.js'
 import { ApiPasteFormat, ExpireDate, Publicity } from 'pastebin-api'
@@ -11,7 +11,11 @@ export enum ActionId {
 }
 
 export function UpdateActions(self: PasteBinAPI): void {
-	const actions: { [id in ActionId]: CompanionActionDefinition | undefined } = {
+	const pasteChoices: DropdownChoice[] = []
+	self.pastes.forEach((paste) => {
+		pasteChoices.push({ id: paste.paste_key, label: paste.paste_title })
+	})
+	const actions: { [id in ActionId]: CompanionActionDefinition } = {
 		[ActionId.CreatePaste]: {
 			name: 'Create Paste',
 			options: [
@@ -81,21 +85,23 @@ export function UpdateActions(self: PasteBinAPI): void {
 				if (pasteUri) {
 					self.log('info', `Paste ${name} created with URI: ${pasteUri}`)
 				}
+				await self.getPastes({ userKey: self.apiUserKey, limit: 1000 })
 			},
 		},
 		[ActionId.DeletePaste]: {
 			name: 'Delete Paste',
 			options: [
 				{
-					type: 'textinput',
+					type: 'dropdown',
 					id: 'pasteKey',
 					label: 'Paste Key',
-					useVariables: { local: true },
-					regex: Regex.SOMETHING,
+					choices: pasteChoices,
+					default: pasteChoices[0]?.id ?? 'No available pastes',
 				},
 			],
 			callback: async (action, context) => {
 				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
+				if (key == 'No available pastes') return
 				const deletePaste = await self.deletePaste({ pasteKey: key, userKey: self.apiUserKey })
 				if (deletePaste) {
 					self.log('info', `Paste: ${key} deleted`)
@@ -114,6 +120,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 					useVariables: { local: true },
 					regex: Regex.SOMETHING,
 					default: '100',
+					tooltip: 'Min: 1, Max: 1000',
 				},
 			],
 			callback: async (action, context) => {
@@ -126,11 +133,11 @@ export function UpdateActions(self: PasteBinAPI): void {
 			name: 'Get Raw Paste',
 			options: [
 				{
-					type: 'textinput',
+					type: 'dropdown',
 					id: 'pasteKey',
 					label: 'Paste Key',
-					useVariables: { local: true },
-					regex: Regex.SOMETHING,
+					choices: pasteChoices,
+					default: pasteChoices[0]?.id ?? 'No available pastes',
 				},
 				{
 					type: 'custom-variable',
@@ -140,6 +147,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 			],
 			callback: async (action, context) => {
 				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
+				if (key == 'No available pastes') return
 				const paste = await self.getRawPaste({ userKey: self.apiUserKey, pasteKey: key })
 				if (paste === undefined) {
 					self.log('warn', `Could not get raw paste ${key}`)
