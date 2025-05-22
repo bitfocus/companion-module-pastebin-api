@@ -73,7 +73,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 				if (action.options.folder) {
 					folder = await context.parseVariablesInString(action.options.folder.toString())
 				}
-				const pasteUri = await self.createPaste({
+				const pasteUrl = await self.createPaste({
 					name: name,
 					apiUserKey: self.apiUserKey,
 					publicity: action.options.publicity as Publicity,
@@ -82,8 +82,9 @@ export function UpdateActions(self: PasteBinAPI): void {
 					folderKey: folder,
 					code: code,
 				})
-				if (pasteUri) {
-					self.log('info', `Paste ${name} created with URI: ${pasteUri}`)
+				if (pasteUrl) {
+					self.log('info', `Paste ${name} created with URI: ${pasteUrl}`)
+					self.setVariableValues({ ['mostRecentUrl']: pasteUrl })
 				}
 				await self.getPastes({ userKey: self.apiUserKey, limit: 1000 })
 			},
@@ -105,6 +106,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 				const deletePaste = await self.deletePaste({ pasteKey: key, userKey: self.apiUserKey })
 				if (deletePaste) {
 					self.log('info', `Paste: ${key} deleted`)
+					await self.getPastes({ userKey: self.apiUserKey, limit: 1000 })
 				} else {
 					self.log('warn', `Could not delete ${key}`)
 				}
@@ -119,7 +121,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 					label: 'Limit',
 					useVariables: { local: true },
 					regex: Regex.SOMETHING,
-					default: '100',
+					default: '1000',
 					tooltip: 'Min: 1, Max: 1000',
 				},
 			],

@@ -5,6 +5,7 @@ import { sanitiseVariableId } from './util.js'
 export function UpdateVariableDefinitions(self: PasteBinAPI): void {
 	const variableDefs: CompanionVariableDefinition[] = []
 	const variableValues: CompanionVariableValues = {}
+	variableDefs.push({ variableId: `mostRecentUrl`, name: `URL: Most recently created` })
 	self.pastes.forEach((paste) => {
 		variableDefs.push({
 			variableId: `${sanitiseVariableId(paste.paste_key)}_Key`,
