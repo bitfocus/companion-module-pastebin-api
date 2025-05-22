@@ -18,6 +18,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			width: 8,
 			default: API_PATH,
 			regex: Regex.HOSTNAME,
+			required: true,
 		},
 		{
 			type: 'textinput',
@@ -25,6 +26,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			label: 'Developer API Key',
 			width: 8,
 			regex: Regex.SOMETHING,
+			required: true,
 		},
 		{
 			type: 'textinput',
@@ -32,6 +34,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			label: 'User Name',
 			width: 8,
 			regex: Regex.SOMETHING,
+			required: true,
 		},
 		{
 			type: 'textinput',
@@ -39,6 +42,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			label: 'Password',
 			width: 8,
 			regex: Regex.SOMETHING,
+			required: true,
 		},
 	]
 }
