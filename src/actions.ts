@@ -1,6 +1,7 @@
 import { CompanionActionDefinition, DropdownChoice, Regex } from '@companion-module/base'
 import { DropdownExpire, DropdownPasteFormat, DropdownPrivate } from './choices.js'
 import type { PasteBinAPI } from './main.js'
+import { orderBy } from 'lodash'
 import { ApiPasteFormat, ExpireDate, Publicity } from 'pastebin-api'
 
 export enum ActionId {
@@ -11,10 +12,11 @@ export enum ActionId {
 }
 
 export function UpdateActions(self: PasteBinAPI): void {
-	const pasteChoices: DropdownChoice[] = []
+	let pasteChoices: DropdownChoice[] = []
 	self.pastes.forEach((paste) => {
 		pasteChoices.push({ id: paste.paste_key, label: paste.paste_title })
 	})
+	pasteChoices = orderBy(pasteChoices, ['label'], ['asc'])
 	const actions: { [id in ActionId]: CompanionActionDefinition } = {
 		[ActionId.CreatePaste]: {
 			name: 'Create Paste',
@@ -98,6 +100,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 					label: 'Paste Key',
 					choices: pasteChoices,
 					default: pasteChoices[0]?.id ?? 'No available pastes',
+					allowCustom: true,
 				},
 			],
 			callback: async (action, context) => {
@@ -140,6 +143,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 					label: 'Paste Key',
 					choices: pasteChoices,
 					default: pasteChoices[0]?.id ?? 'No available pastes',
+					allowCustom: true,
 				},
 				{
 					type: 'custom-variable',

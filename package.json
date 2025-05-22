@@ -24,11 +24,13 @@
 	},
 	"dependencies": {
 		"@companion-module/base": "~1.11.3",
+		"lodash": "~4.17.21",
 		"p-queue": "~8.1.0",
 		"pastebin-api": "^7.0.0"
 	},
 	"devDependencies": {
 		"@companion-module/tools": "^2.3.0",
+		"@types/lodash": "4.17.17",
 		"@types/node": "^22.15.20",
 		"eslint": "^9.27.0",
 		"husky": "^9.1.7",
