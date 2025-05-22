@@ -12,7 +12,9 @@ Create, get and delete pastes.
 ### Variables
 
 - URL of most recently create paste
-  Per Paste:
+
+#### Per Paste:
+
 - Format
 - Key
 - Title
