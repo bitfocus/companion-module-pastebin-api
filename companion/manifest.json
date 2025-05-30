@@ -5,8 +5,8 @@
 	"description": "Bitfocus Companion module for Pastebin",
 	"version": "0.0.0",
 	"license": "MIT",
-	"repository": "git+https://github.com/phillipivan/companion-module-pastebin-api.git",
-	"bugs": "https://github.com/phillipivan/companion-module-pastebin-api/issues",
+	"repository": "git+https://github.com/bitfocus/companion-module-pastebin-api.git",
+	"bugs": "https://github.com/bitfocus/companion-module-pastebin-api/issues",
 	"maintainers": [
 		{
 			"name": "Phillip Ivan Pietruschka",
