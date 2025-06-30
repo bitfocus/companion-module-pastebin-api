@@ -28,6 +28,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 
 	async init(config: ModuleConfig): Promise<void> {
 		this.config = config
+		process.title = this.label
 		this.updateActions() // export actions
 		this.updateFeedbacks() // export feedbacks
 		this.updateVariableDefinitions() // export variable definitions
@@ -41,6 +42,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 
 	async configUpdated(config: ModuleConfig): Promise<void> {
 		this.config = config
+		process.title = this.label
 		this.queue.clear()
 		if (config.devKey) {
 			this.client = new PasteClient({ apiKey: config.devKey, domain: config.domain })
