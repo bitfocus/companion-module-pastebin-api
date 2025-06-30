@@ -159,7 +159,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 					self.log('warn', `Could not get raw paste ${key}`)
 					return
 				}
-				self.setCustomVariableValue(action.options.variable?.toString() ?? '', paste)
+				context.setCustomVariableValue(action.options.variable?.toString() ?? '', paste)
 			},
 		},
 	}
