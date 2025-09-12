@@ -66,14 +66,15 @@ export function UpdateActions(self: PasteBinAPI): void {
 					useVariables: { local: true },
 					regex: Regex.SOMETHING,
 					required: true,
+					multiline: true,
 				},
 			],
-			callback: async (action, context) => {
-				const name = await context.parseVariablesInString(action.options.name?.toString() ?? '')
-				const code = await context.parseVariablesInString(action.options.code?.toString() ?? '')
+			callback: async (action, _context) => {
+				const name = action.options.name?.toString() ?? ''
+				const code = action.options.code?.toString() ?? ''
 				let folder: string | undefined
 				if (action.options.folder) {
-					folder = await context.parseVariablesInString(action.options.folder.toString())
+					folder = action.options.folder.toString()
 				}
 				const pasteUrl = await self.createPaste({
 					name: name,
@@ -103,8 +104,8 @@ export function UpdateActions(self: PasteBinAPI): void {
 					allowCustom: true,
 				},
 			],
-			callback: async (action, context) => {
-				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
+			callback: async (action, _context) => {
+				const key = action.options.pasteKey?.toString() ?? ''
 				if (key == 'No available pastes') return
 				const deletePaste = await self.deletePaste({ pasteKey: key, userKey: self.apiUserKey })
 				if (deletePaste) {
@@ -128,8 +129,8 @@ export function UpdateActions(self: PasteBinAPI): void {
 					tooltip: 'Min: 1, Max: 1000',
 				},
 			],
-			callback: async (action, context) => {
-				let limit = Number.parseInt(await context.parseVariablesInString(action.options.limit?.toString() ?? ''))
+			callback: async (action, _context) => {
+				let limit = Number.parseInt(action.options.limit?.toString() ?? '')
 				limit = Number.isNaN(limit) ? 100 : limit < 1 ? 1 : limit > 1000 ? 1000 : limit
 				await self.getPastes({ userKey: self.apiUserKey, limit: limit })
 			},
@@ -152,7 +153,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 				},
 			],
 			callback: async (action, context) => {
-				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
+				const key = action.options.pasteKey?.toString() ?? ''
 				if (key == 'No available pastes') return
 				const paste = await self.getRawPaste({ userKey: self.apiUserKey, pasteKey: key })
 				if (paste === undefined) {
