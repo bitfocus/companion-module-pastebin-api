@@ -21,7 +21,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			required: true,
 		},
 		{
-			type: 'textinput',
+			type: 'secret-text',
 			id: 'devKey',
 			label: 'Developer API Key',
 			width: 8,
@@ -37,7 +37,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			required: true,
 		},
 		{
-			type: 'textinput',
+			type: 'secret-text',
 			id: 'password',
 			label: 'Password',
 			width: 8,
