@@ -4,8 +4,11 @@ const API_PATH = 'pastebin.com'
 
 export interface ModuleConfig {
 	domain: string
-	devKey: string
 	user: string
+}
+
+export interface ModuleSecrets {
+	devKey: string
 	password: string
 }
 

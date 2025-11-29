@@ -1,5 +1,5 @@
 import { InstanceBase, runEntrypoint, InstanceStatus, SomeCompanionConfigField } from '@companion-module/base'
-import { GetConfigFields, type ModuleConfig } from './config.js'
+import { GetConfigFields, type ModuleConfig, type ModuleSecrets } from './config.js'
 import { UpdateVariableDefinitions } from './variables.js'
 import { UpgradeScripts } from './upgrades.js'
 import { UpdateActions } from './actions.js'
@@ -14,8 +14,9 @@ import {
 } from 'pastebin-api'
 import PQueue from 'p-queue'
 
-export class PasteBinAPI extends InstanceBase<ModuleConfig> {
+export class PasteBinAPI extends InstanceBase<ModuleConfig, ModuleSecrets> {
 	config!: ModuleConfig // Setup in init()
+	secrets!: ModuleSecrets
 	private queue = new PQueue({ concurrency: 2 })
 	private client!: PasteClient
 	private userKey: string = ''
@@ -26,13 +27,14 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 		super(internal)
 	}
 
-	async init(config: ModuleConfig): Promise<void> {
+	async init(config: ModuleConfig, _isFirstInit: boolean, secrets: ModuleSecrets): Promise<void> {
 		this.config = config
+		this.secrets = secrets
 		process.title = this.label
 		this.updateActions() // export actions
 		this.updateFeedbacks() // export feedbacks
 		this.updateVariableDefinitions() // export variable definitions
-		this.configUpdated(config).catch(() => {})
+		this.configUpdated(config, secrets).catch(() => {})
 	}
 	// When module gets deleted
 	async destroy(): Promise<void> {
@@ -40,13 +42,14 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 		this.queue.clear()
 	}
 
-	async configUpdated(config: ModuleConfig): Promise<void> {
+	async configUpdated(config: ModuleConfig, secrets: ModuleSecrets): Promise<void> {
 		this.config = config
+		this.secrets = secrets
 		process.title = this.label
 		this.queue.clear()
-		if (config.devKey) {
-			this.client = new PasteClient({ apiKey: config.devKey, domain: config.domain })
-			await this.login(config)
+		if (secrets.devKey) {
+			this.client = new PasteClient({ apiKey: secrets.devKey, domain: config.domain })
+			await this.login(config, secrets)
 			await this.getPastes({ limit: 1000, userKey: this.apiUserKey })
 		} else {
 			this.updateStatus(InstanceStatus.BadConfig)
@@ -57,10 +60,10 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 		return this.userKey
 	}
 
-	private async login(config: ModuleConfig): Promise<string | undefined> {
+	private async login(config: ModuleConfig, secrets: ModuleSecrets): Promise<string | undefined> {
 		return this.queue.add(async () => {
 			try {
-				this.userKey = await this.client.login({ name: config.user, password: config.password })
+				this.userKey = await this.client.login({ name: config.user, password: secrets.password })
 				this.updateStatus(InstanceStatus.Ok, `Logged In`)
 				return this.userKey
 			} catch (error) {
@@ -68,7 +71,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 				this.updateStatus(InstanceStatus.AuthenticationFailure)
 				return undefined
 			}
-		}) as Promise<string | undefined>
+		})
 	}
 
 	public async deletePaste(options: DeletePasteOptions): Promise<boolean | undefined> {
@@ -82,7 +85,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 
 				return undefined
 			}
-		}) as Promise<boolean | undefined>
+		})
 	}
 
 	public async createPaste(options: CreateOptions): Promise<string | undefined> {
@@ -96,7 +99,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 
 				return undefined
 			}
-		}) as Promise<string | undefined>
+		})
 	}
 
 	public async getPastes(options: GetPastesOptions): Promise<ParsedPaste[] | undefined> {
@@ -116,7 +119,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 
 				return undefined
 			}
-		}) as Promise<ParsedPaste[] | undefined>
+		})
 	}
 
 	public async getRawPaste(options: GetRawPasteOptions): Promise<string | undefined> {
@@ -129,7 +132,7 @@ export class PasteBinAPI extends InstanceBase<ModuleConfig> {
 
 				return undefined
 			}
-		}) as Promise<string | undefined>
+		})
 	}
 
 	// Return config fields for web config
