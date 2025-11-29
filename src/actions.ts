@@ -1,7 +1,7 @@
 import { CompanionActionDefinition, DropdownChoice, Regex } from '@companion-module/base'
 import { DropdownExpire, DropdownPasteFormat, DropdownPrivate } from './choices.js'
 import type { PasteBinAPI } from './main.js'
-import { orderBy } from 'lodash'
+import { orderBy } from 'es-toolkit'
 import { ApiPasteFormat, ExpireDate, Publicity } from 'pastebin-api'
 
 export enum ActionId {
@@ -104,8 +104,8 @@ export function UpdateActions(self: PasteBinAPI): void {
 					allowCustom: true,
 				},
 			],
-			callback: async (action, _context) => {
-				const key = action.options.pasteKey?.toString() ?? ''
+			callback: async (action, context) => {
+				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
 				if (key == 'No available pastes') return
 				const deletePaste = await self.deletePaste({ pasteKey: key, userKey: self.apiUserKey })
 				if (deletePaste) {
@@ -153,7 +153,7 @@ export function UpdateActions(self: PasteBinAPI): void {
 				},
 			],
 			callback: async (action, context) => {
-				const key = action.options.pasteKey?.toString() ?? ''
+				const key = await context.parseVariablesInString(action.options.pasteKey?.toString() ?? '')
 				if (key == 'No available pastes') return
 				const paste = await self.getRawPaste({ userKey: self.apiUserKey, pasteKey: key })
 				if (paste === undefined) {
