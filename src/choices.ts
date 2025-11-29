@@ -1,7 +1,7 @@
 import { type DropdownChoice } from '@companion-module/base'
 import { ExpireTime, PasteFormat, Publicity } from './enums.js'
 
-export const DropdownExpire: DropdownChoice[] = [
+export const DropdownExpire = [
 	{ id: ExpireTime.Never, label: 'Never' },
 	{ id: ExpireTime.TenMinutes, label: '10 Minutes' },
 	{ id: ExpireTime.Hour, label: '1 Hour' },
@@ -11,15 +11,15 @@ export const DropdownExpire: DropdownChoice[] = [
 	{ id: ExpireTime.Month, label: '1 Month' },
 	{ id: ExpireTime.SixMonths, label: '6 Months' },
 	{ id: ExpireTime.Year, label: '1 Year' },
-]
+] as const satisfies DropdownChoice[]
 
-export const DropdownPrivate: DropdownChoice[] = [
+export const DropdownPrivate = [
 	{ id: Publicity.Public, label: 'Public' },
 	{ id: Publicity.Unlisted, label: 'Unlisted' },
 	{ id: Publicity.Private, label: 'Private' },
-]
+] as const satisfies DropdownChoice[]
 
-export const DropdownPasteFormat: DropdownChoice[] = [
+export const DropdownPasteFormat = [
 	{ id: PasteFormat.FourCS, label: '4CS' },
 	{ id: PasteFormat.SixFiveZeroTwoAcme, label: '6502 ACME Cross Assembler' },
 	{ id: PasteFormat.SixFiveZeroTwoKickAssembler, label: '6502 Kick Assembler' },
@@ -285,4 +285,4 @@ export const DropdownPasteFormat: DropdownChoice[] = [
 	{ id: PasteFormat.YARA, label: 'YARA' },
 	{ id: PasteFormat.Z80Asm, label: 'Z80 Assembler' },
 	{ id: PasteFormat.ZXBasic, label: 'ZXBasic' },
-]
+] as const satisfies DropdownChoice[]

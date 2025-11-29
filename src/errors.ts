@@ -13,9 +13,9 @@ export const BadResponse = {
 	MaxPrivate: 'Bad API request, maximum number of 10 private pastes for your free account',
 	MissingPasteCode: 'Bad API request, api_paste_code was empty',
 	MaxSizeExceeded: 'Bad API request, maximum paste file size exceeded',
-}
+} as const satisfies Record<string, string>
 
-export const BadResponseArray: string[] = [
+export const BadResponseArray = [
 	BadResponse.CantPasteAsGuest,
 	BadResponse.ExpiredUserKey,
 	BadResponse.InvalidDevKey,
@@ -30,4 +30,4 @@ export const BadResponseArray: string[] = [
 	BadResponse.MaxSizeExceeded,
 	BadResponse.MaxUnlisted,
 	BadResponse.MissingPasteCode,
-]
+] as const satisfies string[]
