@@ -7,3 +7,4 @@ DEBUG-*
 /.yarn
 /.vscode
 pastebin-api-*.tgz
+.DS_Store

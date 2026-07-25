@@ -1,7 +1,7 @@
-import { CompanionFeedbackDefinitions } from '@companion-module/base'
-import type { PasteBinAPI } from './main.js'
+// import { CompanionFeedbackDefinitions } from '@companion-module/base'
+import type PasteBinAPI from './main.js'
 
 export function UpdateFeedbacks(self: PasteBinAPI): void {
-	const feedbackDefiitions: CompanionFeedbackDefinitions = {}
+	const feedbackDefiitions: Record<string, never> = {}
 	self.setFeedbackDefinitions(feedbackDefiitions)
 }

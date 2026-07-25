@@ -7,7 +7,7 @@ Create, get and delete pastes.
 - Create Paste
 - Delete Paste
 - Get Pastes
-- Get Raw Paste (returns data to a custom variable)
+- Get Raw Paste (returns data to a variable)
 
 ## Variables
 

@@ -2,12 +2,12 @@ import { Regex, type SomeCompanionConfigField } from '@companion-module/base'
 
 const API_PATH = 'pastebin.com'
 
-export interface ModuleConfig {
+export type ModuleConfig = {
 	domain: string
 	user: string
 }
 
-export interface ModuleSecrets {
+export type ModuleSecrets = {
 	devKey: string
 	password: string
 }
@@ -21,7 +21,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			width: 8,
 			default: API_PATH,
 			regex: Regex.HOSTNAME,
-			required: true,
+			minLength: 1,
 		},
 		{
 			type: 'secret-text',
@@ -29,7 +29,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			label: 'Developer API Key',
 			width: 8,
 			regex: Regex.SOMETHING,
-			required: true,
+			minLength: 1,
 		},
 		{
 			type: 'textinput',
@@ -37,7 +37,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			label: 'User Name',
 			width: 8,
 			regex: Regex.SOMETHING,
-			required: true,
+			minLength: 1,
 		},
 		{
 			type: 'secret-text',
@@ -45,7 +45,7 @@ export function GetConfigFields(): SomeCompanionConfigField[] {
 			label: 'Password',
 			width: 8,
 			regex: Regex.SOMETHING,
-			required: true,
+			minLength: 1,
 		},
 	]
 }
